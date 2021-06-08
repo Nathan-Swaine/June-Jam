@@ -5,7 +5,9 @@ using UnityEngine;
 public class move_script : MonoBehaviour
 {
 
-    public charater_controller controller;
+    public CharacterController2D controller;
+    float horizontalMove = 0f;
+    public float runSpeed = 40f;
     // Start is called before the first frame update
     void Start()
     {
@@ -15,12 +17,13 @@ public class move_script : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-       Input.GetAxisRaw("Horizontal");
+       //Get movement direction
+       horizontalMove = Input.GetAxisRaw("Horizontal") * runSpeed;
 
     }
 
     void FixedUpdate() 
     {
-    
+        controller.move(horizontalMove * Time.fixedDeltaTime, false, false);
     }
 }
