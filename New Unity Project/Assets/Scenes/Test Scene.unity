@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657815, g: 0.49641192, b: 0.57481617, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -359,7 +359,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.99999994, y: 2, z: 1}
+  m_Size: {x: 0.99999994, y: 2.2, z: 1}
   m_Center: {x: 0.000000059604645, y: 0, z: 0}
 --- !u!23 &789774961
 MeshRenderer:
@@ -439,9 +439,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 748c19a325b4c44c9a70096a633eef05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rb: {fileID: 0}
+  rb: {fileID: 789774963}
   speed: 5
   jumpForce: 15
+  gravity: 2
+  groundCheck: {fileID: 118598725}
+  groundDistance: 0.4
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!1 &893666231
 GameObject:
   m_ObjectHideFlags: 0
@@ -629,7 +635,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Size: {x: 1, y: 1.3, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &1052295492
 MeshRenderer:
