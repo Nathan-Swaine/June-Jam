@@ -4,61 +4,38 @@ using UnityEngine;
 
 public class move : MonoBehaviour
 {   
-    
-    public Rigidbody rb;    
-    public float speed = 50f; //player move speed
-    public float jumpForce = 400f; //player jump force applied as vector mangnitude
-    public float gravity = -30f; 
+    float speed = 50f;
+    float gravity = -30f;
     public Transform groundCheck;
     public float groundDistance = 0.4f; 
     public LayerMask groundMask; 
     bool isGrounded;
+    public Rigidbody rb;    
+    
     void Start()
     {
        rb = GetComponent<Rigidbody>(); // get the ridigid body from the inspector. 
     }
 
- 
     void Update() // Update is called once per frame
     {
-        float x = Input.GetAxis("Horizontal");
-        
-        rb.velocity = new Vector3 (x, 0, 0 ).normalized * speed ;
-        //these two lines handle horizontal movement across the screen. .normalized is essential here
+        float x = Input.GetAxis("Horizontal") * speed;
+        rb.AddForce(x, 0, 0, ForceMode.Force);  //these two lines handle horizontal movement across the screen. .normalized is essential here
 
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
-      
-
-        switch (isGrounded)
+    
+        if(!isGrounded)
         {
-            case false: //is in air
-                gravity -=  8 *Time.deltaTime;
-                rb.velocity = new Vector3(x, gravity,0);
-            break;
-
-            case true: //is not in air
-                gravity = -1f;
-
-            break;
-            
+            gravity -= 8*Time.deltaTime;
+            rb.AddForce(x, gravity, 0, ForceMode.Acceleration);
         }
-
-        if (Input.GetKey("space"))
+        else
+        {
+            gravity = -1f;
+        }
+        if (Input.GetKeyDown("space") && isGrounded)
             {
-            x *= speed;
-            //new velocity velocityBefore;
-            //velocityBefore = rb.velocity;
-            //velocityBefore += 
-            //rb.velocity += new Vector3(x, jumpForce,0);
-
-            Vector3 jumpVector; 
-            jumpVector = new Vector3(x,2f,0f);
-
-            rb.AddForce(jumpVector, jumpForce*Time.deltaTime, ForceMode.Impulse);
-        
-            rb.velocity = new Vector3 (x, 0, 0 ).normalized * speed ;
-            
-            
+                rb.AddForce(x, 200f,0, ForceMode.Impulse);    
             }
         
     }
