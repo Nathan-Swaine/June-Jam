@@ -440,8 +440,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 789774963}
-  speed: 20
-  jumpForce: 900
+  speed: 50
+  jumpForce: 400
   gravity: -30
   groundCheck: {fileID: 918410522}
   groundDistance: 0.4
