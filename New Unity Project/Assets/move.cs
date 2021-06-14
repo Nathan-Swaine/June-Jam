@@ -10,7 +10,7 @@ public class move : MonoBehaviour
     public LayerMask groundMask; 
     public bool isGrounded;
     public Rigidbody me;  
-    public Rigidbody selectedWeapon;
+    //public Rigidbody selectedWeapon;
     public float xDiretionMovement;
    
 
@@ -23,12 +23,20 @@ public class move : MonoBehaviour
     void Update() // Update is called once per frame
     {
 
-        xDiretionMovement = Input.GetAxis("Horizontal") * 50f;  // move the player left or right, if they are not moving then its 50 * 0, so they wont move
-        me.AddForce(xDiretionMovement, 0, 0, ForceMode.Force);  //these two lines handle horizontal movement across the screen.
-        selectedWeapon.AddForce(xDiretionMovement,0,0,ForceMode.Force);
+        xDiretionMovement = Input.GetAxis("Horizontal");  // move the player left or right, if they are not moving then its 50 * 0, so they wont move
+        me.AddForce(xDiretionMovement*3000f, 0, 0, ForceMode.Force);  //these two lines handle horizontal movement across the screen.
+        //selectedWeapon.AddForce(xDiretionMovement,0,0,ForceMode.Force);
         checkGround(groundCheck, 0.4f, groundMask); //are we in air?
         checkGravity(); //check if we are jumping / on ground
-      
+        
+        if (xDiretionMovement > 0)
+        {
+            transform.localRotation = Quaternion.Euler(0, 90, 0);
+        }else if(xDiretionMovement < 0 )
+        {
+            transform.localRotation = Quaternion.Euler(0, -90, 0);
+
+        }
     }
 
     void checkGravity()
@@ -38,7 +46,7 @@ public class move : MonoBehaviour
         {
             gravity -= 8*Time.deltaTime;
             me.AddForce(xDiretionMovement, gravity, 0, ForceMode.Acceleration);
-            selectedWeapon.AddForce(xDiretionMovement,gravity,0,ForceMode.Acceleration);
+            //selectedWeapon.AddForce(xDiretionMovement,gravity,0,ForceMode.Acceleration);
 
         }
         else// on ground
@@ -47,8 +55,9 @@ public class move : MonoBehaviour
         }
         if (Input.GetKeyDown("space") && isGrounded) //on ground and pressing space
             {
-                me.AddForce(xDiretionMovement, 200f,0, ForceMode.Impulse);
-                selectedWeapon.AddForce(xDiretionMovement,200f,0,ForceMode.Impulse);
+                me.AddForce(0, 100f, 0, ForceMode.Impulse);
+                me.AddForce(xDiretionMovement*1500f, 0, 0, ForceMode.Force);
+                //selectedWeapon.AddForce(xDiretionMovement,200f,0,ForceMode.Impulse);
 
             }
     }       
