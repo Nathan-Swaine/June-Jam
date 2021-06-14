@@ -37,6 +37,5 @@ public class move : MonoBehaviour
             {
                 rb.AddForce(x, 200f,0, ForceMode.Impulse);    
             }
-        
     }
 }
