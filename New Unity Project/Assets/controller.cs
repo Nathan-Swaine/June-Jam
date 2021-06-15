@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class move : MonoBehaviour
+public class controller : MonoBehaviour
 {   
     float gravity = -30f;
     public Transform groundCheck;
@@ -10,33 +10,26 @@ public class move : MonoBehaviour
     public LayerMask groundMask; 
     public bool isGrounded;
     public Rigidbody me;  
-    //public Rigidbody selectedWeapon;
+    Animator animator; 
     public float xDiretionMovement;
    
 
     void Start()
     {
         me = GetComponent<Rigidbody>(); // get the ridigid body from the inspector.
+        animator = GetComponent<Animator>();
        
     }
 
     void Update() // Update is called once per frame
     {
 
-        xDiretionMovement = Input.GetAxis("Horizontal");  // move the player left or right, if they are not moving then its 50 * 0, so they wont move
-        me.AddForce(xDiretionMovement*3000f, 0, 0, ForceMode.Force);  //these two lines handle horizontal movement across the screen.
-        //selectedWeapon.AddForce(xDiretionMovement,0,0,ForceMode.Force);
+
+        move();
         checkGround(groundCheck, 0.4f, groundMask); //are we in air?
         checkGravity(); //check if we are jumping / on ground
         
-        if (xDiretionMovement > 0)
-        {
-            transform.localRotation = Quaternion.Euler(0, 90, 0);
-        }else if(xDiretionMovement < 0 )
-        {
-            transform.localRotation = Quaternion.Euler(0, -90, 0);
-
-        }
+        
     }
 
     void checkGravity()
@@ -66,5 +59,18 @@ public class move : MonoBehaviour
     {
         isGrounded = Physics.CheckSphere(Object.position, Radius, Layer); //returns a bool if a sphere around object, with the radius 'radius' is touching anything with the 'layer'
         checkGravity();
+    }
+
+    void move()
+    {
+        xDiretionMovement = Input.GetAxis("Horizontal");  // find if the player is trying to move left or right. 
+        animator.SetBool("isWalking", false); //we set this to false as a precaution, this way we can simplyfy our logic and only worry about setting it to true
+        if (xDiretionMovement != 0) //if we are trying to move
+        {
+            transform.localRotation = Quaternion.Euler(0, xDiretionMovement*90, 0); //roate the object in the direction we are trying to moving
+            animator.SetBool("isWalking",true); //start the walking animation 
+        }  
+        me.AddForce(xDiretionMovement*3000f, 0, 0, ForceMode.Force);  //move the player
+
     }
 }
