@@ -9,38 +9,30 @@ public class controller : MonoBehaviour
     public float groundDistance = 0.4f; 
     public LayerMask groundMask; 
     public bool isGrounded;
-    public Rigidbody me;  
+    public Rigidbody me; 
+     
+    public Transform body;
     Animator animator; 
     public float xDiretionMovement;
-   
+    public Vector3 end;   
 
     void Start()
     {
         me = GetComponent<Rigidbody>(); // get the ridigid body from the inspector.
         animator = GetComponent<Animator>();
-       
     }
-
     void Update() // Update is called once per frame
     {
-
-
         move();
         checkGround(groundCheck, 0.4f, groundMask); //are we in air?
-        checkGravity(); //check if we are jumping / on ground
-        
-        
+        checkGravity(me, gravity); //check if we are jumping / on ground
     }
-
-    void checkGravity()
+    void checkGravity(Rigidbody Object, float gravity)
     {
-    
         if(!isGrounded)//in air
         {
             gravity -= 8*Time.deltaTime;
-            me.AddForce(xDiretionMovement, gravity, 0, ForceMode.Acceleration);
-            //selectedWeapon.AddForce(xDiretionMovement,gravity,0,ForceMode.Acceleration);
-
+            Object.AddForce(xDiretionMovement, gravity, 0, ForceMode.Acceleration); //selectedWeapon.AddForce(xDiretionMovement,gravity,0,ForceMode.Acceleration);
         }
         else// on ground
         {
@@ -48,29 +40,33 @@ public class controller : MonoBehaviour
         }
         if (Input.GetKeyDown("space") && isGrounded) //on ground and pressing space
             {
-                me.AddForce(0, 100f, 0, ForceMode.Impulse);
-                me.AddForce(xDiretionMovement*1500f, 0, 0, ForceMode.Force);
-                //selectedWeapon.AddForce(xDiretionMovement,200f,0,ForceMode.Impulse);
-
+                Object.AddForce(0, 300f, 0, ForceMode.Impulse);
+                Object.AddForce(xDiretionMovement*1500f, 0, 0, ForceMode.Force);//selectedWeapon.AddForce(xDiretionMovement,200f,0,ForceMode.Impulse);
             }
     }       
-
     void checkGround(Transform Object, float Radius , LayerMask Layer)
     {
         isGrounded = Physics.CheckSphere(Object.position, Radius, Layer); //returns a bool if a sphere around object, with the radius 'radius' is touching anything with the 'layer'
-        checkGravity();
     }
-
     void move()
     {
         xDiretionMovement = Input.GetAxis("Horizontal");  // find if the player is trying to move left or right. 
         animator.SetBool("isWalking", false); //we set this to false as a precaution, this way we can simplyfy our logic and only worry about setting it to true
-        if (xDiretionMovement != 0) //if we are trying to move
-        {
-            transform.localRotation = Quaternion.Euler(0, xDiretionMovement*90, 0); //roate the object in the direction we are trying to moving
-            animator.SetBool("isWalking",true); //start the walking animation 
-        }  
+        smooth_turn();
         me.AddForce(xDiretionMovement*3000f, 0, 0, ForceMode.Force);  //move the player
 
+    }
+    void smooth_turn()
+    {
+        if (xDiretionMovement > 0)
+        {
+            animator.SetBool("isWalking",true); //start the walking animation
+            body.rotation = Quaternion.Lerp(body.rotation, Quaternion.Euler(0f, 90f, 0), Time.deltaTime * 5);
+
+        } else if(xDiretionMovement < 0) 
+        {
+            animator.SetBool("isWalking",true); //start the walking animation
+            body.rotation = Quaternion.Lerp(body.rotation, Quaternion.Euler(0f, -90f, 0), Time.deltaTime * 5);
+        }
     }
 }
