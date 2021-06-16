@@ -10,7 +10,9 @@ public class weapon : MonoBehaviour
     public LayerMask groundMask;
     public Transform Spear;
     public bool isHolding;   
+    public bool inAir; 
     public BoxCollider spearCollider;
+    public float xDiretionMovement; 
     void Start()
     {
         spearCollider.GetComponent<Collider>().enabled = false;
@@ -28,11 +30,28 @@ public class weapon : MonoBehaviour
     }
     void fire(Rigidbody Object, float force)
     {
-        spearCollider.GetComponent<Collider>().enabled = true;
-        Spear.transform.parent = null;
-        Object.isKinematic = false;
-        Object.useGravity = true;
-        Object.AddForce(500f,force,0, ForceMode.Force);
-        isHolding = false;        
+        
+        if (isHolding)
+        {
+            
+            xDiretionMovement = Input.GetAxis("Horizontal");  // find if the player is trying to move left or right. 
+            Spear.transform.parent = null;
+            Object.isKinematic = false;
+            Object.useGravity = true;
+            Object.AddForce( xDiretionMovement * 500f,force,0, ForceMode.Force);
+            isHolding = false;        
+            inAir = true;
+            weaponSpin();
+        }
     }
+
+    void weaponSpin()
+    {
+        if(!isHolding && inAir)
+        {
+            Spear.localEulerAngles += Vector3.forward * 5000 * Time.deltaTime; //change vector 3 forward to something else , maybe vector right left depending on xdirection input? 
+        }
+    }
+
+    
 }
