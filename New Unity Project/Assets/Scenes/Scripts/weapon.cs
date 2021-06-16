@@ -32,7 +32,7 @@ public class weapon : MonoBehaviour
         Spear.transform.parent = null;
         Object.isKinematic = false;
         Object.useGravity = true;
-        Object.AddForce(100f,force,0, ForceMode.Force);
+        Object.AddForce(500f,force,0, ForceMode.Force);
         isHolding = false;        
     }
 }
