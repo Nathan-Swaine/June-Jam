@@ -2,8 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class weapon : MonoBehaviour
-{
+public class weapon : MonoBehaviour{
     public Rigidbody rb;
     public Transform currentWeapon;
     public bool isHolding= true;   
@@ -34,7 +33,7 @@ public class weapon : MonoBehaviour
             weapon.transform.parent = null; //de-couple from the parent, so we can fly off into the distance 
             Object.isKinematic = false; // object is not static
             Object.useGravity = true; // object is subjected to gravity
-            Object.AddForce(force *throwDirection, force /2, 0, ForceMode.Impulse); //Impluse looks better than acceleration or Force
+            Object.AddForce(force *throwDirection, force/2, 0, ForceMode.Impulse); //Impluse looks better than acceleration or Force
             
             isHolding = false;//we are not holding the weapon
             inAir = true; // because its in the air
@@ -44,11 +43,11 @@ public class weapon : MonoBehaviour
 
     void weaponSpin(Transform weapon)
     {
-        if(!isHolding && inAir){weapon.localEulerAngles += Vector3.forward * 500 / Time.deltaTime; //change vector 3 forward to something else , maybe vector right left depending on xdirection input? }
+        if(!isHolding && inAir){weapon.transform.RotateAround(weapon.transform.position, Vector3.back, 2000* Time.deltaTime); }//change vector 3 forward to something else , maybe vector right left depending on xdirection input? }
     }
 
     void OnCollisionEnter(Collision col) 
     {
         if (col.gameObject.name == "Player"){tipCollider.GetComponent<Collider>().enabled = false;}
     }
-}}
+}
