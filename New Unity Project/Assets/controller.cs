@@ -4,14 +4,12 @@ using UnityEngine;
 
 public class controller : MonoBehaviour
 {   
-    public Transform groundCheck;
-    public float groundDistance = 0.4f; 
+    public Transform groundCheck, body, weaponCurvePoint;
+    public float groundDistance = 0.4f, xDiretionMovement; 
     public LayerMask groundMask; 
     public bool isGrounded;
     public Rigidbody me; 
-    public Transform body;
     Animator animator; 
-    public float xDiretionMovement;
     public Vector3 end;   
 
     void Start()
@@ -42,12 +40,14 @@ public class controller : MonoBehaviour
             {
                 animator.SetBool("isWalking",true); //start the walking animation
                 body.rotation = Quaternion.Lerp(body.rotation, Quaternion.Euler(0f, 90f, 0), Time.deltaTime * 5);
+                weaponCurvePoint.rotation = Quaternion.Lerp(body.rotation, Quaternion.Euler(0f, 90f, 0), Time.deltaTime * 5);
 
             } 
         else if(xDiretionMovement < 0)
             {
                 animator.SetBool("isWalking",true); //start the walking animation
                 body.rotation = Quaternion.Lerp(body.rotation, Quaternion.Euler(0f, -90f, 0), Time.deltaTime * 5);
+                weaponCurvePoint.rotation = Quaternion.Lerp(body.rotation, Quaternion.Euler(0f, -90f, 0), Time.deltaTime * 5);
             }
     }
 }

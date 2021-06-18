@@ -4,14 +4,13 @@ using UnityEngine;
 
 public class weapon : MonoBehaviour{
     public Rigidbody rb;
-    public Transform weaponCurvePoint;
-    public GameObject currentWeapon, hand;
-    public bool isHolding= true , inAir = false;   
+    public Transform weaponCurvePoint, hand;
+    public GameObject currentWeapon;
+    public bool isHolding= true , inAir = false, isReturning= false;   
     public BoxCollider tipCollider;
-    public float throwPower= 100f, throwDirection; 
-    
-    private Vector3 startPos;
-    private Vector3 endPos;
+    public float throwPower= 100f, throwDirection, time = 0.0f; 
+    public Vector3 oldPos, newPos;
+
 
     void Start()
         {
@@ -30,14 +29,37 @@ public class weapon : MonoBehaviour{
                 {
                     tipCollider.GetComponent<Collider>().enabled = true;
                 }
+           
             if (!isHolding && !inAir && Input.GetButtonDown("Fire2"))
-                {
-                    Debug.Log("Fire");
-                    startPos = currentWeapon.transform.position;
-                    endPos = hand.transform.position;
-                    recall(currentWeapon, startPos ,endPos);
+            {
+                isReturning = true;
+            }
+            if (isReturning)
+            {
+                recall(rb, weaponCurvePoint, hand);
+            }
+        }
+    void recall(Rigidbody weapon, Transform midpoint, Transform hand)
+        { 
+            if (time < 1.0f)
+                { 
+                    oldPos = rb.position;
+                    weapon.velocity = Vector3.zero;
+                    weapon.isKinematic = true;
                     
-                } 
+                    time += Time.deltaTime;
+                    Vector3 newPos= Vector3.Lerp(oldPos, hand.position, time);
+                    weapon.position = newPos;
+                    
+                    
+                    
+                    
+
+                }
+            else if( time >= 1.00f)
+            {
+                isReturning = false;
+            }
         }
     void fire(Rigidbody Object, float force, Transform weapon)
         {
@@ -81,31 +103,8 @@ public class weapon : MonoBehaviour{
             else
                 {                    
                     inAir = false;
-                    GetComponent<Rigidbody>().isKinematic = true;
                 }
             
             
-        }
-
-    void recall(GameObject weapon, Vector3 startPos, Vector3 endPos)
-        { 
-            float time = 0.0f;
-            if (time < 1.0f)
-                {
-                    Debug.Log("Fire");
-                    
-                    weapon.transform.position = Vector3.Lerp(startPos, endPos, time);
-                    //weapon.position = getBQCPoint(time, oldPos, midpoint.transform.position , target.transform.position);
-                    time += Time.deltaTime;
-                }
-        }
-
-    Vector3 getBQCPoint( float time, Vector3 p0, Vector3 p1, Vector3 p2) //p0 old pos of axe || p1 is point which affects curve / 'curve point' || p2 is the target / players hand / 'hand'
-    {
-        float u = 1 - time;
-        float tt = time * time;
-        float uu = u * u; 
-        Vector3 p = (uu * p0) + (2 * u * time * p1) + (tt *p2);
-        return p;
-    }
+        }   
 }
