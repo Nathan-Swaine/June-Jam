@@ -9,33 +9,33 @@ public class weapon : MonoBehaviour{
     public BoxCollider tipCollider;
     public float throwPower= 100f, throwDirection, time = 0.0f, lastFacing; 
     public Vector3 oldPos, newPos;
-    public enum weaponState{holding, thrown, flying, returning};
-    public weaponState weaponstate;
+    public enum WeaponState{holding, thrown, flying, returning}; //this shit just crazy
+    public WeaponState weaponState; //SO imagine WeaponState (line 12) like an array of different values. Except all of these values are of a custom type, we define this type on line 13. Without Line 13, Line 12 would not work because the computer would not know / have a type for these values.
 
 
     void Start()
         {
             rb = GetComponent<Rigidbody>(); 
-            rb.isKinematic = true;
-            rb.useGravity = false;
-            weaponstate = weaponState.holding;
+            weaponState = WeaponState.holding;
+            weaponSetup(rb, weaponState, currentWeapon.transform);
+
             }
     void Update() // Update is called once per frame
         {   
-            if (Input.GetButtonDown("Fire1"))//a    && weaponstate == weaponState.holding)
+            if (Input.GetButtonDown("Fire1") && weaponState == WeaponState.holding)
                 {
                     fire(rb, throwPower, currentWeapon.transform);
                 } 
-            if (weaponstate == weaponState.flying)
+            if (weaponState == WeaponState.flying)
                 {
                     tipCollider.GetComponent<Collider>().enabled = true;
                 }
            
-            if (weaponstate == weaponState.thrown && Input.GetButtonDown("Fire2"))
+            if (weaponState == WeaponState.thrown && Input.GetButtonDown("Fire2"))
             {
-                weaponstate = weaponState.returning;
+                weaponState = WeaponState.returning;
             }
-            if (weaponstate == weaponState.returning)
+            if (weaponState == WeaponState.returning)
             {
                 recall(rb, weaponCurvePoint, hand);
             }
@@ -51,24 +51,21 @@ public class weapon : MonoBehaviour{
                     time += Time.deltaTime;
                     Vector3 newPos= Vector3.Lerp(oldPos, hand.position, time);
                     weapon.position = newPos;
-                    weaponstate = weaponState.holding;
+                    
                 }
             else if( time >= 1.00f)
             {
-                weaponstate = weaponState.holding;
+                weaponState = WeaponState.holding;
             }
         }
-    void fire(Rigidbody Object, float force, Transform weapon)
+    void fire(Rigidbody weapon, float force, Transform weaponTransform)
         {
-         
-            weapon.transform.parent = null; //de-couple from the parent, so we can fly off into the distance 
-            Object.isKinematic = false; // object is not static
-            Object.useGravity = true; // object is subjected to gravity
+            weaponState = WeaponState.flying;
+            weaponSetup(weapon, weaponState, weaponTransform);
             getThrowDirection();
-            Object.AddForce(force* throwDirection, force/2, 0, ForceMode.Impulse); //Impluse looks better than acceleration or Force
+            weapon.AddForce(force* throwDirection, force/2, 0, ForceMode.Impulse); //Impluse looks better than acceleration or Force
             
-            weaponstate = weaponState.flying;
-            weaponSpin(weapon); // needs to spin to look good
+            weaponSpin(weaponTransform); // needs to spin to look good
         
         }
 
@@ -88,7 +85,7 @@ public class weapon : MonoBehaviour{
         }
     void weaponSpin(Transform weapon)
         {
-            if(weaponstate == weaponState.flying) // if traveling 
+            if(weaponState == WeaponState.flying) // if traveling 
                 {
                     weapon.transform.RotateAround(weapon.transform.position, Vector3.back, 2000* Time.deltaTime);
                 }
@@ -102,9 +99,23 @@ public class weapon : MonoBehaviour{
                 }
             else
                 {                    
-                    weaponstate = weaponState.thrown;
+                    weaponState = WeaponState.thrown;
                 }
-            
-            
-        }   
+        } 
+    void weaponSetup (Rigidbody weapon, WeaponState weaponState, Transform weaponTransform)
+        {
+            if (weaponState == WeaponState.holding)
+                {
+                 weapon.isKinematic = true;
+                 weapon.useGravity = false;
+                }
+
+            if (weaponState == WeaponState.flying)
+            {
+                weapon.transform.parent = null; //de-couple from the parent, so we can fly off into the distance 
+                weapon.isKinematic = false; // object is not static
+                weapon.useGravity = true; // object is subjected to gravity
+            }
+        }
+    
 }
