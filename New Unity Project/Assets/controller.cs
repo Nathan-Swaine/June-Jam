@@ -29,25 +29,25 @@ public class controller : MonoBehaviour
     {
         xDiretionMovement = Input.GetAxis("Horizontal");  // find if the player is trying to move left or right. 
         animator.SetBool("isWalking", false); //we set this to false as a precaution, this way we can simplyfy our logic and only worry about setting it to true
-        smooth_turn();
+        smooth_turn(body);
         Object.AddForce(xDiretionMovement*3000f, 0, 0, ForceMode.Force);  //move the player
         if(Input.GetKeyDown("space") && isGrounded){Object.AddForce(0, 300f, 0, ForceMode.Acceleration);}
     }
     
-    void smooth_turn()
+    void smooth_turn(Transform target)
     {
         if (xDiretionMovement > 0)
             {
                 animator.SetBool("isWalking",true); //start the walking animation
-                body.rotation = Quaternion.Lerp(body.rotation, Quaternion.Euler(0f, 90f, 0), Time.deltaTime * 5);
-                weaponCurvePoint.rotation = Quaternion.Lerp(body.rotation, Quaternion.Euler(0f, 90f, 0), Time.deltaTime * 5);
+                target.rotation = Quaternion.Lerp(target.rotation, Quaternion.Euler(0f, 90f, 0), Time.deltaTime * 5);
+                weaponCurvePoint.rotation = Quaternion.Lerp(target.rotation, Quaternion.Euler(0f, 90f, 0), Time.deltaTime * 5);
 
             } 
         else if(xDiretionMovement < 0)
             {
                 animator.SetBool("isWalking",true); //start the walking animation
-                body.rotation = Quaternion.Lerp(body.rotation, Quaternion.Euler(0f, -90f, 0), Time.deltaTime * 5);
-                weaponCurvePoint.rotation = Quaternion.Lerp(body.rotation, Quaternion.Euler(0f, -90f, 0), Time.deltaTime * 5);
+                target.rotation = Quaternion.Lerp(target.rotation, Quaternion.Euler(0f, -90f, 0), Time.deltaTime * 5);
+                weaponCurvePoint.rotation = Quaternion.Lerp(target.rotation, Quaternion.Euler(0f, -90f, 0), Time.deltaTime * 5);
             }
     }
 }

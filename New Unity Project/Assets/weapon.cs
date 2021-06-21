@@ -5,6 +5,7 @@ using UnityEngine;
 public class weapon : MonoBehaviour{
     public Rigidbody rb;
     public Transform weaponCurvePoint, hand;
+    public Quaternion resetRot; 
     public GameObject currentWeapon;
     public BoxCollider tipCollider;
     public float throwPower= 100f, throwDirection, time = 0.0f, lastFacing; 
@@ -17,6 +18,7 @@ public class weapon : MonoBehaviour{
         {
             rb = GetComponent<Rigidbody>(); 
             weaponState = WeaponHas.holding;
+            resetRot= gameObject.transform.rotation;
             weaponSetup(rb, weaponState, currentWeapon.transform);
 
             }
@@ -38,32 +40,36 @@ public class weapon : MonoBehaviour{
                 }
             if (weaponState == WeaponHas.returning)
                 {
-                    recall(rb, weaponCurvePoint, hand);
+                    recall(rb, hand, currentWeapon);
+
                 }
             weaponSetup(rb,weaponState, currentWeapon.transform);
             
         }
-    void recall(Rigidbody weapon, Transform midpoint, Transform hand)
+    void recall(Rigidbody weapon, Transform target, GameObject weaponObject)
         { 
             if (time < 1.0f)
                 { 
-                    oldPos = rb.position;
+                    oldPos = weapon.position;
                     weapon.velocity = Vector3.zero;
                     weapon.isKinematic = true;
-                    
                     time += Time.deltaTime;
-                    Vector3 newPos= Vector3.Lerp(oldPos, hand.position, time);
+                    Vector3 newPos= Vector3.Lerp(oldPos, target.position, time);
+                    weaponSpin(weapon);
                     weapon.position = newPos;
-                    if (weapon.position == hand.position)
+                    
+                    
+                    if (weapon.position == target.position)
                         {
                             weaponState = WeaponHas.holding;
                         }
-                    
                 }
             else if( time >= 1.00f)
             {
-                weaponState = WeaponHas.holding;
+                Debug.Log("Something has gone wrong in weapon.cs, the time float has excceeded 1f :O");
+                
             }
+
         }
     void fire(Rigidbody weapon, float force, Transform weaponTransform)
         {
@@ -71,8 +77,8 @@ public class weapon : MonoBehaviour{
             weaponSetup(weapon, weaponState, weaponTransform);
             getThrowDirection();
             weapon.AddForce(force* throwDirection, force/2, 0, ForceMode.Impulse); //Impluse looks better than acceleration or Force
+            weaponSpin(weapon);
             
-            weaponSpin(weaponTransform); // needs to spin to look good
         
         }
 
@@ -90,12 +96,9 @@ public class weapon : MonoBehaviour{
                     lastFacing = throwDirection;
                 }
         }
-    void weaponSpin(Transform weapon)
+    void weaponSpin(Rigidbody weapon)
         {
-            if(weaponState == WeaponHas.flying) // if traveling 
-                {
-                    weapon.transform.RotateAround(weapon.transform.position, Vector3.back, 2000* Time.deltaTime);
-                }
+            weapon.AddTorque(Vector3.back, ForceMode.Impulse);
         }
 
     void OnCollisionEnter(Collision col) 
@@ -113,11 +116,12 @@ public class weapon : MonoBehaviour{
         {
             if (weaponState == WeaponHas.holding)
                 {
+                    //weapon.interpolation = false;
                     weapon.isKinematic = true;
                     weapon.useGravity = false;
                     currentWeapon.transform.parent = hand;
-                    currentWeapon.transform.rotation = hand.rotation;
                     time = 0.0f;
+
                 }
 
             if (weaponState == WeaponHas.flying)
