@@ -97,7 +97,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 0}
+  m_LightingDataAsset: {fileID: 112000000, guid: c3815cc92f4e24c7bb2988daa357d60e, type: 2}
   m_LightingSettings: {fileID: 0}
 --- !u!196 &4
 NavMeshSettings:
@@ -646,6 +646,7 @@ MonoBehaviour:
   rb: {fileID: 859195878}
   weaponCurvePoint: {fileID: 821327171}
   hand: {fileID: 213684548}
+  resetRot: {x: 0, y: 0, z: 0, w: 0}
   currentWeapon: {fileID: 859195876}
   tipCollider: {fileID: 859195880}
   throwPower: 10

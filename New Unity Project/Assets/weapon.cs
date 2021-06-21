@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class weapon : MonoBehaviour{
     public Rigidbody rb;
-    public Transform weaponCurvePoint, hand;
+    public Transform weaponCurvePoint, hand, rot;
     public Quaternion resetRot; 
     public GameObject currentWeapon;
     public BoxCollider tipCollider;
     public float throwPower= 100f, throwDirection, time = 0.0f, lastFacing; 
-    public Vector3 oldPos, newPos;
+    public Vector3 oldPos, newPos, origLocPos, origLocRot;
     public enum WeaponHas{holding, thrown, flying, returning}; //this shit just crazy
     public WeaponHas weaponState; //SO imagine WeaponHas (line 12) like an array of different values. Except all of these values are of a custom type, we define this type on line 13. Without Line 13, Line 12 would not work because the computer would not know / have a type for these values.
 
@@ -18,10 +18,12 @@ public class weapon : MonoBehaviour{
         {
             rb = GetComponent<Rigidbody>(); 
             weaponState = WeaponHas.holding;
-            resetRot= gameObject.transform.rotation;
+            
             weaponSetup(rb, weaponState, currentWeapon.transform);
+            rot.rotation= currentWeapon.transform.rotation;
 
             }
+
     void Update() // Update is called once per frame
         {   
             if (Input.GetButtonDown("Fire1") && weaponState == WeaponHas.holding)
@@ -41,7 +43,6 @@ public class weapon : MonoBehaviour{
             if (weaponState == WeaponHas.returning)
                 {
                     recall(rb, hand, currentWeapon);
-
                 }
             weaponSetup(rb,weaponState, currentWeapon.transform);
             
@@ -59,6 +60,7 @@ public class weapon : MonoBehaviour{
                     weapon.position = newPos;
                     
                     
+                    
                     if (weapon.position == target.position)
                         {
                             weaponState = WeaponHas.holding;
@@ -69,6 +71,7 @@ public class weapon : MonoBehaviour{
                 Debug.Log("Something has gone wrong in weapon.cs, the time float has excceeded 1f :O");
                 
             }
+            
 
         }
     void fire(Rigidbody weapon, float force, Transform weaponTransform)
@@ -98,7 +101,7 @@ public class weapon : MonoBehaviour{
         }
     void weaponSpin(Rigidbody weapon)
         {
-            weapon.AddTorque(Vector3.back, ForceMode.Impulse);
+            weapon.AddTorque(Vector3.back,ForceMode.Impulse);
         }
 
     void OnCollisionEnter(Collision col) 
@@ -117,6 +120,7 @@ public class weapon : MonoBehaviour{
             if (weaponState == WeaponHas.holding)
                 {
                     //weapon.interpolation = false;
+                    currentWeapon.transform.rotation =  Quaternion.Slerp(currentWeapon.transform.rotation, rot.rotation, time);
                     weapon.isKinematic = true;
                     weapon.useGravity = false;
                     currentWeapon.transform.parent = hand;
