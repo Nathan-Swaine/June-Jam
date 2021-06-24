@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Enviroment
   - weapon
+  - spear
   layers:
   - Default
   - TransparentFX

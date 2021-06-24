@@ -4,12 +4,11 @@ using UnityEngine;
 
 public class weapon : MonoBehaviour{
     public Rigidbody rb;
-    public Transform weaponCurvePoint, hand, rot;
-    public Quaternion resetRot; 
+    public Transform weaponCurvePoint, hand, reset;
     public GameObject currentWeapon;
     public BoxCollider tipCollider;
     public float throwPower= 100f, throwDirection, time = 0.0f, lastFacing; 
-    public Vector3 oldPos, newPos, origLocPos, origLocRot;
+    public Vector3 oldPos, newPos;
     public enum WeaponHas{holding, thrown, flying, returning}; //this shit just crazy
     public WeaponHas weaponState; //SO imagine WeaponHas (line 12) like an array of different values. Except all of these values are of a custom type, we define this type on line 13. Without Line 13, Line 12 would not work because the computer would not know / have a type for these values.
 
@@ -18,10 +17,12 @@ public class weapon : MonoBehaviour{
         {
             rb = GetComponent<Rigidbody>(); 
             weaponState = WeaponHas.holding;
+            reset.localPosition =currentWeapon.transform.localPosition;
+            reset.localEulerAngles = currentWeapon.transform.localEulerAngles;
+            reset.localRotation = currentWeapon.transform.localRotation;
+            
             
             weaponSetup(rb, weaponState, currentWeapon.transform);
-            rot.rotation= currentWeapon.transform.rotation;
-
             }
 
     void Update() // Update is called once per frame
@@ -101,7 +102,7 @@ public class weapon : MonoBehaviour{
         }
     void weaponSpin(Rigidbody weapon)
         {
-            weapon.AddTorque(Vector3.back,ForceMode.Impulse);
+            weapon.AddTorque(Vector3.up,ForceMode.Impulse);
         }
 
     void OnCollisionEnter(Collision col) 
@@ -119,8 +120,10 @@ public class weapon : MonoBehaviour{
         {
             if (weaponState == WeaponHas.holding)
                 {
-                    //weapon.interpolation = false;
-                    currentWeapon.transform.rotation =  Quaternion.Slerp(currentWeapon.transform.rotation, rot.rotation, time);
+                    
+                    currentWeapon.transform.localPosition = reset.localPosition;
+                    currentWeapon.transform.localEulerAngles = reset.localEulerAngles;
+                    currentWeapon.transform.localRotation = reset.localRotation;
                     weapon.isKinematic = true;
                     weapon.useGravity = false;
                     currentWeapon.transform.parent = hand;
