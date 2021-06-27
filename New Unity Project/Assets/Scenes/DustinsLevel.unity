@@ -259,7 +259,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e73497b2f3a54c9a8a587b65e81a785, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnPoints: []
+  spawnPoints:
+  - {fileID: 1604700556}
+  - {fileID: 394018784}
+  - {fileID: 692209653}
+  - {fileID: 183713600}
+  - {fileID: 619087273}
+  - {fileID: 557580892}
+  - {fileID: 614746819}
+  - {fileID: 1887953547}
+  - {fileID: 1292904618}
+  - {fileID: 1885803209}
+  spearPreFab: {fileID: 1522584924}
 --- !u!1001 &12886727
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3486,7 +3497,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1145012127}
-  - component: {fileID: 1145012128}
   m_Layer: 0
   m_Name: Spawn Points
   m_TagString: Untagged
@@ -3514,24 +3524,6 @@ Transform:
   m_Father: {fileID: 679473823}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1145012128
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1145012126}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6e73497b2f3a54c9a8a587b65e81a785, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  spawnPoints:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
 --- !u!1001 &1151653802
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4080,7 +4072,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1330958241}
-  - component: {fileID: 1330958242}
   m_Layer: 0
   m_Name: Spawn Points
   m_TagString: Untagged
@@ -4103,24 +4094,6 @@ Transform:
   m_Father: {fileID: 1061788211}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1330958242
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1330958240}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6e73497b2f3a54c9a8a587b65e81a785, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  spawnPoints:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
 --- !u!1 &1356152988
 GameObject:
   m_ObjectHideFlags: 0
