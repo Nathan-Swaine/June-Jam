@@ -7,6 +7,7 @@ public class spawn : MonoBehaviour
 {
     public Transform[] spawnPoints;
     public GameObject spearPreFab;
+    public float spearSpeed; 
 
 
     int dustinsLimit = 0;
@@ -27,7 +28,7 @@ public class spawn : MonoBehaviour
         Debug.Log(spawnTime);
         if (Time.time >= spawnTime && dustinsLimit < 15)
         {
-            spawnSpear();
+            checkSpearSpawn();
             spawnTime += timeBetween;
             
             
@@ -35,17 +36,24 @@ public class spawn : MonoBehaviour
         //spawnSpear();
     }
 
-    void spawnSpear()
+    void checkSpearSpawn()
     {
         int randInt = Random.Range(0 , spawnPoints.Length);
 
-        Quaternion spearRotation = Quaternion.Euler (0, 0, -90);
-
-        for (int i = 0; i < spawnPoints.Length; i++)
+        if (spawnPoints[randInt].position.x > this.gameObject.transform.position.x) //find out if the position of the next spawn point is further along the x axis than the p
         {
-            Instantiate(spearPreFab, spawnPoints[i].position, spearRotation);
-
-            dustinsLimit++;
+            Quaternion spearRotation = Quaternion.Euler (0, 0, 90);
+            GameObject spear = Instantiate(spearPreFab, spawnPoints[randInt].position, spearRotation)as GameObject;
+            spear.GetComponent<Rigidbody>().AddForce(-spearSpeed,0,0, ForceMode.Impulse);
         }
+        else
+        {
+            Quaternion spearRotation = Quaternion.Euler (90, 0, 90);
+            GameObject spear = Instantiate(spearPreFab, spawnPoints[randInt].position, spearRotation)as GameObject;
+            spear.GetComponent<Rigidbody>().AddForce(spearSpeed,0,0, ForceMode.Impulse);
+        }
+
+        dustinsLimit++;
+    
     }
 }
