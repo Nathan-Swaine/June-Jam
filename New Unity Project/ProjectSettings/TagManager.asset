@@ -7,6 +7,7 @@ TagManager:
   - Enviroment
   - weapon
   - spear
+  - Border
   layers:
   - Default
   - TransparentFX

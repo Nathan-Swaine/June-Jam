@@ -25,7 +25,7 @@ public class spawn : MonoBehaviour
         float timeBetween = 5f; 
         
 
-        Debug.Log(spawnTime);
+        //Debug.Log(spawnTime);
         if (Time.time >= spawnTime && dustinsLimit < 15)
         {
             checkSpearSpawn();

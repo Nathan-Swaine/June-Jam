@@ -10,7 +10,10 @@ public class controller : MonoBehaviour
     public bool isGrounded;
     public Rigidbody me; 
     Animator animator; 
-    public Vector3 end;   
+    public Vector3 end;
+
+    int playerHealth = 100;
+    public HealthBar healthBarObject;
 
     void Start()
     {
@@ -21,6 +24,12 @@ public class controller : MonoBehaviour
     {
         move(me);
         checkGround(groundCheck, 0.4f, groundMask); //are we in air?
+
+
+        if (playerHealth <= 0)
+        {
+            Destroy(gameObject);
+        }
     }
     
     void checkGround(Transform Object, float Radius , LayerMask Layer){isGrounded = Physics.CheckSphere(Object.position, Radius, Layer);}//returns a bool if a sphere around object, with the radius 'radius' is touching anything with the 'layer'}
@@ -49,5 +58,17 @@ public class controller : MonoBehaviour
                 target.rotation = Quaternion.Lerp(target.rotation, Quaternion.Euler(0f, -90f, 0), Time.deltaTime * 5);
                 weaponCurvePoint.rotation = Quaternion.Lerp(target.rotation, Quaternion.Euler(0f, -90f, 0), Time.deltaTime * 5);
             }
+    }
+
+    void OnCollisionEnter(Collision other)
+    {
+
+        if (other.gameObject.CompareTag("spear"))
+        {
+            playerHealth -= 10;
+            healthBarObject.SetHealth(playerHealth);
+
+            Debug.Log("SDFJKLJ");
+        }
     }
 }
