@@ -6,7 +6,11 @@ using UnityEngine;
 public class spawn : MonoBehaviour
 {
     public Transform[] spawnPoints;
-    public GameObject spearPreFab; 
+    public GameObject spearPreFab;
+
+
+    int dustinsLimit = 0;
+    float spawnTime = 2f;
 
     // Start is called before the first frame update
     void Start()
@@ -17,23 +21,31 @@ public class spawn : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float timeBetween = 100f; 
-        float spawnTime = 2f; 
-        if (Time.time >= spawnTime)
+        float timeBetween = 5f; 
+        
+
+        Debug.Log(spawnTime);
+        if (Time.time >= spawnTime && dustinsLimit < 15)
         {
             spawnSpear();
-            spawnTime += Time.time + timeBetween;
+            spawnTime += timeBetween;
+            
+            
         }
-        spawnSpear();
+        //spawnSpear();
     }
 
     void spawnSpear()
     {
         int randInt = Random.Range(0 , spawnPoints.Length);
 
+        Quaternion spearRotation = Quaternion.Euler (0, 0, -90);
+
         for (int i = 0; i < spawnPoints.Length; i++)
         {
-            Instantiate(spearPreFab, spawnPoints[i].position, Quaternion.identity);
+            Instantiate(spearPreFab, spawnPoints[i].position, spearRotation);
+
+            dustinsLimit++;
         }
     }
 }
