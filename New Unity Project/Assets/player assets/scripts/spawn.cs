@@ -33,14 +33,14 @@ public class spawn : MonoBehaviour
             
             
         }
-        //spawnSpear();
+        
     }
 
     void checkSpearSpawn()
     {
         int randInt = Random.Range(0 , spawnPoints.Length);
 
-        if (spawnPoints[randInt].position.x > this.gameObject.transform.position.x) //find out if the position of the next spawn point is further along the x axis than the p
+        if (spawnPoints[randInt].position.x > this.gameObject.transform.position.x) //find out if the position of the next spawn point is further along the x axis than the player
         {
             Quaternion spearRotation = Quaternion.Euler (0, 0, 90);
             GameObject spear = Instantiate(spearPreFab, spawnPoints[randInt].position, spearRotation)as GameObject;
