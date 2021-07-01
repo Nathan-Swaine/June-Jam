@@ -6,57 +6,54 @@ using UnityEngine;
 public class spawn : MonoBehaviour
 {
     public Transform[] spawnPoints;
-    public GameObject spearPreFab;
-    public float spearSpeed;
+    public GameObject spearPreFab, spear;
+    public float spearSpeed , spawnLifespan = 0.0f, spawnTime = 2f;
     public bool spawnThings = false;
-    public float spawnLifespan = 0.0f;
-
-    int dustinsLimit = 0;
-    float spawnTime = 2f;
+    public int spearLimit = 0, timeBetween = 2;
+    
 
     // Start is called before the first frame update
     void Start()
     {
         spawnThings = true;
+        StartCoroutine(CheckSpearSpawnTime());
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (spawnThings)
-        {
-            float timeBetween = 5f;
-
-            spawnLifespan += Time.deltaTime;
-            //Debug.Log(spawnTime);
-            if (spawnLifespan >= spawnTime && dustinsLimit < 15)
-            {
-                checkSpearSpawn();
-                spawnTime += timeBetween;
-
-
-            }
-        }
+        
     }
 
-    void checkSpearSpawn()
+    void spearSpawn()
     {
         int randInt = Random.Range(0 , spawnPoints.Length);
 
         if (spawnPoints[randInt].position.x > this.gameObject.transform.position.x) //find out if the position of the next spawn point is further along the x axis than the player
         {
             Quaternion spearRotation = Quaternion.Euler (0, 0, 90);
-            GameObject spear = Instantiate(spearPreFab, spawnPoints[randInt].position, spearRotation)as GameObject;
+            spear = Instantiate(spearPreFab, spawnPoints[randInt].position, spearRotation)as GameObject;
             spear.GetComponent<Rigidbody>().AddForce(-spearSpeed,0,0, ForceMode.Impulse);
         }
         else
         {
-            Quaternion spearRotation = Quaternion.Euler (90, 0, 90);
-            GameObject spear = Instantiate(spearPreFab, spawnPoints[randInt].position, spearRotation)as GameObject;
+            Quaternion spearRotation = Quaternion.Euler (0, 0, -90);
+            spear = Instantiate(spearPreFab, spawnPoints[randInt].position, spearRotation)as GameObject;
             spear.GetComponent<Rigidbody>().AddForce(spearSpeed,0,0, ForceMode.Impulse);
         }
 
-        dustinsLimit++;
-    
     }
+
+    IEnumerator CheckSpearSpawnTime()
+    {
+        while (spawnThings)
+        {
+            yield return new WaitForSeconds(timeBetween);
+         
+            spearSpawn();
+            
+        }
+    }
+
+  
 }

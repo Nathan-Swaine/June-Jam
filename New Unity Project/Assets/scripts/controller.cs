@@ -5,7 +5,7 @@ using UnityEngine;
 public class controller : MonoBehaviour
 {   
     public Transform groundCheck, body, weaponCurvePoint;
-    public float groundDistance = 0.4f, xDiretionMovement, playerSpeed; 
+    public float groundDistance = 0.4f, xDiretionMovement, playerSpeed = 6000f; 
     public LayerMask groundMask; 
     public bool isGrounded;
     public Rigidbody me; 
@@ -43,8 +43,10 @@ public class controller : MonoBehaviour
         animator.SetBool("isWalking", false); //we set this to false as a precaution, this way we can simplyfy our logic and only worry about setting it to true
         smooth_turn(body);
         Object.AddForce(xDiretionMovement*playerSpeed, 0, 0, ForceMode.Force);  //move the player
-        if(Input.GetKeyDown("space") && isGrounded){Object.AddForce(0, 300f, 0, ForceMode.Acceleration);}
+        if(Input.GetKeyDown("space") && isGrounded){Object.AddForce(0, 350f, 0, ForceMode.Acceleration);}
     }
+
+  
     
     void smooth_turn(Transform target)
     {
