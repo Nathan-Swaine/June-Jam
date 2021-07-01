@@ -10,10 +10,7 @@ public class PolearmScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log("YEAH");
-
-
-      StartCoroutine(ExecuteAfterTime(2));
+      StartCoroutine(ExecuteAfterTime(10));
     }
 
     // Update is called once per frame

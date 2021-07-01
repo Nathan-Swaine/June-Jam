@@ -5,12 +5,14 @@ using UnityEngine;
 public class controller : MonoBehaviour
 {   
     public Transform groundCheck, body, weaponCurvePoint;
-    public float groundDistance = 0.4f, xDiretionMovement; 
+    public float groundDistance = 0.4f, xDiretionMovement, playerSpeed; 
     public LayerMask groundMask; 
     public bool isGrounded;
     public Rigidbody me; 
     Animator animator; 
     public Vector3 end;
+    public DeathManager deathCall;
+    public AudioSource hitSound;
 
     int playerHealth = 100;
     public HealthBar healthBarObject;
@@ -27,7 +29,8 @@ public class controller : MonoBehaviour
 
 
         if (playerHealth <= 0)
-        {
+        { 
+            deathCall.PlayerDied();
             Destroy(gameObject);
         }
     }
@@ -39,7 +42,7 @@ public class controller : MonoBehaviour
         xDiretionMovement = Input.GetAxis("Horizontal");  // find if the player is trying to move left or right. 
         animator.SetBool("isWalking", false); //we set this to false as a precaution, this way we can simplyfy our logic and only worry about setting it to true
         smooth_turn(body);
-        Object.AddForce(xDiretionMovement*3000f, 0, 0, ForceMode.Force);  //move the player
+        Object.AddForce(xDiretionMovement*playerSpeed, 0, 0, ForceMode.Force);  //move the player
         if(Input.GetKeyDown("space") && isGrounded){Object.AddForce(0, 300f, 0, ForceMode.Acceleration);}
     }
     
@@ -67,8 +70,7 @@ public class controller : MonoBehaviour
         {
             playerHealth -= 10;
             healthBarObject.SetHealth(playerHealth);
-
-            Debug.Log("SDFJKLJ");
+            hitSound.Play();
         }
     }
 }

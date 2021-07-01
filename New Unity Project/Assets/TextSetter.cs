@@ -7,7 +7,7 @@ public class TextSetter : MonoBehaviour
 {
 
     public Text textObject;
-
+    float scoreLifespan;
     public int spearsHit;
     float incrementValue = 1.0f;
     float Score;
@@ -20,12 +20,14 @@ public class TextSetter : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (incrementValue < Time.time)
+        if (incrementValue < scoreLifespan)
         {
             incrementValue += 1;
                 AddScoreText(1.0f);
         }
-        textObject.text = Score.ToString();
+
+        scoreLifespan += Time.deltaTime;
+        textObject.text = Score.ToString(); 
     }
 
     void AddScoreText(float scoreAdd)

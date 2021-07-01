@@ -7,8 +7,9 @@ public class spawn : MonoBehaviour
 {
     public Transform[] spawnPoints;
     public GameObject spearPreFab;
-    public float spearSpeed; 
-
+    public float spearSpeed;
+    public bool spawnThings = false;
+    public float spawnLifespan = 0.0f;
 
     int dustinsLimit = 0;
     float spawnTime = 2f;
@@ -16,24 +17,26 @@ public class spawn : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        spawnThings = true;
     }
 
     // Update is called once per frame
     void Update()
     {
-        float timeBetween = 5f; 
-        
-
-        //Debug.Log(spawnTime);
-        if (Time.time >= spawnTime && dustinsLimit < 15)
+        if (spawnThings)
         {
-            checkSpearSpawn();
-            spawnTime += timeBetween;
-            
-            
+            float timeBetween = 5f;
+
+            spawnLifespan += Time.deltaTime;
+            //Debug.Log(spawnTime);
+            if (spawnLifespan >= spawnTime && dustinsLimit < 15)
+            {
+                checkSpearSpawn();
+                spawnTime += timeBetween;
+
+
+            }
         }
-        
     }
 
     void checkSpearSpawn()

@@ -4,5 +4,14 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/TitleScreen.unity
+    guid: a32309fcef062374688d57c166fbc4a7
+  - enabled: 1
+    path: Assets/Scenes/DustinsLevel.unity
+    guid: 7728e2a9adaa40440a399857e110573a
+  - enabled: 1
+    path: Assets/Scenes/GameOver.unity
+    guid: 629e5ddbaf5191b4dabf81b20a9be791
   m_configObjects: {}
