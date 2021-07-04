@@ -24,9 +24,8 @@ public class controller : MonoBehaviour
     }
     void Update() // Update is called once per frame
     {
-        move(me);
+        //move(me);
         checkGround(groundCheck, 0.4f, groundMask); //are we in air?
-
 
         if (playerHealth <= 0)
         { 
@@ -34,7 +33,11 @@ public class controller : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    
+
+    void FixedUpdate()
+    {
+        move(me);
+    }
     void checkGround(Transform Object, float Radius , LayerMask Layer){isGrounded = Physics.CheckSphere(Object.position, Radius, Layer);}//returns a bool if a sphere around object, with the radius 'radius' is touching anything with the 'layer'}
 
     void move(Rigidbody Object)
@@ -42,7 +45,7 @@ public class controller : MonoBehaviour
         xDiretionMovement = Input.GetAxis("Horizontal");  // find if the player is trying to move left or right. 
         animator.SetBool("isWalking", false); //we set this to false as a precaution, this way we can simplyfy our logic and only worry about setting it to true
         smooth_turn(body);
-        Object.AddForce(xDiretionMovement*playerSpeed, 0, 0, ForceMode.Force);  //move the player
+        Object.AddForce((xDiretionMovement*playerSpeed) * 10, 0, 0, ForceMode.Force);  //move the player
         if(Input.GetKeyDown("space") && isGrounded){Object.AddForce(0, 350f, 0, ForceMode.Acceleration);}
     }
 
