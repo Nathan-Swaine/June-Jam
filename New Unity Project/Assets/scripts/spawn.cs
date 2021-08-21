@@ -7,7 +7,7 @@ public class spawn : MonoBehaviour
 {
     public Transform[] spawnPoints;
     public GameObject spearPreFab, spear;
-    public float spearSpeed , spawnLifespan = 0.0f, spawnTime = 2f;
+    public float spearSpeed = 20, spawnLifespan = 0.0f, spawnTime = 2f;
     public bool spawnThings = false;
     public int spearLimit = 0, timeBetween = 2;
     
@@ -40,6 +40,7 @@ public class spawn : MonoBehaviour
             Quaternion spearRotation = Quaternion.Euler (0, 0, -90);
             spear = Instantiate(spearPreFab, spawnPoints[randInt].position, spearRotation)as GameObject;
             spear.GetComponent<Rigidbody>().AddForce(spearSpeed,0,0, ForceMode.Impulse);
+            Debug.Log("OKAY");
         }
 
     }
